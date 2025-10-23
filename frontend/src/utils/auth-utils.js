@@ -27,4 +27,11 @@ export class AuthUtils {
       }
     }
   }
+
+  static async updateRefreshToken() {
+    const refreshToken = this.getAuthInfo(this.refreshTokenKey);
+    if(refreshToken){
+
+    }
+  }
 }

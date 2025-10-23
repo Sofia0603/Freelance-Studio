@@ -1,5 +1,5 @@
-import {AuthUtils} from "../utils/auth-utils";
-import {HttpUtils} from "../utils/http-utils";
+import {AuthUtils} from "../../utils/auth-utils";
+import {HttpUtils} from "../../utils/http-utils";
 
 export class Logout {
 
@@ -17,7 +17,7 @@ export class Logout {
   async logout() {
 
 
-    const result = await HttpUtils.request('/logout', 'POST', {
+    const result = await HttpUtils.request('/logout', 'POST', false,{
       refreshToken: AuthUtils.getAuthInfo(AuthUtils.refreshTokenKey)
     })
 

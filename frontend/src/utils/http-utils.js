@@ -40,16 +40,23 @@ export class HttpUtils {
     }
 
 
-    if (response.status !== 200 || response.status >= 300) {
+    if (response.status < 200 || response.status >= 300) {
       result.error = true;
       if(useAuth && response.status === 401) {
-          // 1 токена нет
         if(!token){
+          // 1 токена нет
           result.redirect = '/login'
+        } else {
+          // 2 токен устарел / невалиден ( надо обновить )
+          const updateTokenResult = await AuthUtils.updateRefreshToken()
+
+          if (updateTokenResult){
+            // запрос повторно
+            return this.request(url, method, useAuth, body)
+          } else {
+            result.redirect = '/login'
+          }
         }
-
-        // 2 токен устарел
-
       }
     }
 

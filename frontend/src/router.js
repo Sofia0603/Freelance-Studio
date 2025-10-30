@@ -3,6 +3,8 @@ import {Login} from "./components/auth/login";
 import {SignUp} from "./components/auth/sign-up";
 import {Logout} from "./components/auth/logout";
 import {FreelancersList} from "./components/freelancers/freelancers-list";
+import {FileUtils} from "./utils/file-utils";
+import {FreelancersView} from "./components/freelancers/freelancers-view";
 
 export class Router {
   constructor() {
@@ -67,13 +69,25 @@ export class Router {
         }
       },
       {
-        route: '/freelances',
+        route: '/freelancers',
         title:'Фрилансеры',
         filePathTemplate:'/templates/pages/freelancers/list.html',
         useLayout:'/templates/layout.html',
         load:() =>{
           new FreelancersList(this.openNewRoute.bind(this));
-        }
+        },
+        styles:['dataTables.bootstrap4.min.css'],
+        scripts:['jquery.dataTables.min.js', 'dataTables.bootstrap4.min.js']
+      },
+      {
+        route: '/freelancers/view',
+        title:'Фрилансер',
+        filePathTemplate:'/templates/pages/freelancers/view.html',
+        useLayout:'/templates/layout.html',
+        load:() =>{
+          new FreelancersView(this.openNewRoute.bind(this));
+        },
+        styles:['dataTables.bootstrap4.min.css'],
       },
     ]
   }
@@ -92,9 +106,7 @@ export class Router {
     await this.activateRoute(null, currentRoute);
   }
 
-
-
- async clickHandler(e){
+  async clickHandler(e){
     let element = null;
     if(e.target.nodeName === 'A'){
         element = e.target;
@@ -104,10 +116,11 @@ export class Router {
 
     if(element){
       e.preventDefault();
+      const currentRoute = window.location.pathname;
 
       const url = element.href.replace(window.location.origin, '');
 
-      if (!url || url === '/#' || url.startsWith('javascript:void(0)')){
+      if (!url || (currentRoute === url.replace('#', ' ')) || url.startsWith('javascript:void(0)')){
         return;
       }
 
@@ -118,13 +131,23 @@ export class Router {
   }
 
   async activateRoute(e, oldRoute = null){
+
     if(oldRoute){
       const currentRoute = this.routes.find(item => item.route === oldRoute);
+
       if(currentRoute.styles && currentRoute.styles.length > 0){
         currentRoute.styles.forEach(style => {
             document.querySelector(`link[href='/css/${style}']`).remove();
         })
       }
+
+      if(currentRoute.scripts && currentRoute.scripts.length > 0){
+        currentRoute.scripts.forEach(script => {
+          document.querySelector(`script[src='/js/${script}']`).remove();
+        })
+      }
+
+
       if(currentRoute.unload && typeof currentRoute.unload === 'function'){
         currentRoute.unload();
       }
@@ -138,13 +161,18 @@ export class Router {
 
     if (newRoute) {
       if(newRoute.styles && newRoute.styles.length > 0){
+
         newRoute.styles.forEach(style => {
-          const link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = '/css/' + style;
-          document.head.insertBefore(link, this.adminLteStyleElement);
+          FileUtils.loadPageStyles('/css/' + style, this.adminLteStyleElement);
         })
       }
+
+      if(newRoute.scripts && newRoute.scripts.length > 0){
+        for (const script of newRoute.scripts){
+         await FileUtils.loadPageScript('/js/' + script);
+        }
+      }
+
 
       if(newRoute.title){
         this.titlePageElement.innerText = newRoute.title + ' | Freelance Studio';

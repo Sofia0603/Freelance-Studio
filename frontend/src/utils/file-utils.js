@@ -20,4 +20,9 @@ export class FileUtils {
     link.href = src;
     document.head.insertBefore(link, insertBeforeElement);
   }
+
+
+  static convertFileToBase64(file){
+
+  }
 }

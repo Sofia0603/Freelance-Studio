@@ -1,4 +1,5 @@
 import {HttpUtils} from "../../utils/http-utils";
+import {FileUtils} from "../../utils/file-utils";
 
 export class FreelancersCreate {
   constructor(openNewRoute) {
@@ -63,7 +64,7 @@ export class FreelancersCreate {
       }
 
       if(this.avatarInputElement.files && this.avatarInputElement.files.length > 0) {
-        createData.avatarBase64 = '';
+        createData.avatarBase64 = FileUtils.convertFileToBase64(this.avatarInputElement.files[0]);
       }
 
       const result = await HttpUtils.request('/freelancers', 'POST', true, createData)

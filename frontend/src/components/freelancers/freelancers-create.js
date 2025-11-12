@@ -64,7 +64,7 @@ export class FreelancersCreate {
       }
 
       if(this.avatarInputElement.files && this.avatarInputElement.files.length > 0) {
-        createData.avatarBase64 = FileUtils.convertFileToBase64(this.avatarInputElement.files[0]);
+        createData.avatarBase64 = await FileUtils.convertFileToBase64(this.avatarInputElement.files[0]);
       }
 
       const result = await HttpUtils.request('/freelancers', 'POST', true, createData)

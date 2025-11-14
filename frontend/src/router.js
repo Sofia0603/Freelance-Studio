@@ -7,6 +7,9 @@ import {FileUtils} from "./utils/file-utils";
 import {FreelancersView} from "./components/freelancers/freelancers-view";
 import {FreelancersCreate} from "./components/freelancers/freelancers-create";
 import {FreelancersEdit} from "./components/freelancers/freelancers-edit";
+import {FreelancersDelete} from "./components/freelancers/freelancers-delete";
+import {OrdersList} from "./components/orders/orders-list";
+import {OrdersView} from "./components/orders/orders-view";
 
 export class Router {
   constructor() {
@@ -110,6 +113,33 @@ export class Router {
           new FreelancersEdit(this.openNewRoute.bind(this));
         },
         scripts:['bs-custom-file-input.min.js'],
+      },
+      {
+        route: '/freelancers/delete',
+        load:() =>{
+          new FreelancersDelete(this.openNewRoute.bind(this));
+        },
+      },
+      {
+        route: '/orders',
+        title:'Заказы',
+        filePathTemplate:'/templates/pages/orders/list.html',
+        useLayout:'/templates/layout.html',
+        load:() =>{
+          new OrdersList(this.openNewRoute.bind(this));
+        },
+        styles:['dataTables.bootstrap4.min.css'],
+        scripts:['jquery.dataTables.min.js', 'dataTables.bootstrap4.min.js']
+      },
+      {
+        route: '/orders/view',
+        title:'Просмотр заказов',
+        filePathTemplate:'/templates/pages/orders/view.html',
+        useLayout:'/templates/layout.html',
+        load:() =>{
+          new OrdersView(this.openNewRoute.bind(this));
+        },
+        styles:['dataTables.bootstrap4.min.css'],
       },
     ]
   }

@@ -14,7 +14,7 @@ export class FreelancersView{
     }
 
     document.getElementById('edit-link').href = '/freelancers/edit?id=' + id;
-    document.getElementById('delete-link').href = '/freelancers/edit?id=' + id;
+    document.getElementById('delete-link').href = '/freelancers/delete?id=' + id;
 
     this.getFreelancer(id).then();
   }

@@ -28,12 +28,9 @@ export class FreelancersEdit {
     this.skillsInputElement = document.getElementById('skillsInput');
     this.infoInputElement =document.getElementById('infoInput');
     this.avatarInputElement  = document.getElementById('avatarInput');
-
-
-
     this.levelSelectElement = document.getElementById('levelSelect');
 
-    this.freelancerOriginalData = {}
+
 
     this.getFreelancer(id).then();
 
